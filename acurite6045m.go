@@ -51,13 +51,11 @@ func enrichAcurite6045M(rm paho.PublishReceived) map[string]any {
 	retv["t_model"] = msg.Model
 	retv["t_id"] = msg.ID
 
-	stormDistMi := acuriteStormDistanceMi(msg.StormDist)
-	stormDistKm := libwx.Mile(stormDistMi).Km()
-	if stormDistMi == -1 {
-		stormDistKm = -1
+	if msg.StormDist >= 0 && msg.StormDist <= 30 {
+		stormDistMi := libwx.Mile(acuriteStormDistanceMi(msg.StormDist))
+		retv["f_storm_distance_mi"] = stormDistMi.Unwrap()
+		retv["f_storm_distance_km"] = stormDistMi.Km().Unwrap()
 	}
-	retv["f_storm_distance_mi"] = stormDistMi
-	retv["f_storm_distance_km"] = stormDistKm
 
 	retv["f_temp_f"] = msg.TempF
 	retv["f_temp_c"] = libwx.TempF(msg.TempF).C().Unwrap()
