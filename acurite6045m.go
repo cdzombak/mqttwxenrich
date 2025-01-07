@@ -15,7 +15,7 @@ import (
 // Only the fields we need for enrichment are included.
 type acurite6045mMessage struct {
 	Humidity  float64 `json:"humidity"`
-	StormDist int     `json:"storm_distance"`
+	StormDist int     `json:"storm_dist"`
 	TempF     float64 `json:"temperature_F"`
 
 	Time  time.Time `json:"time"`
