@@ -39,7 +39,7 @@ func enrichVevor7in1(rm paho.PublishReceived) map[string]any {
 
 	// for the Vevor 7-in-1 weather station, enrichment includes:
 	// - time, model, ID
-	// - rain_mm, rain_cm, rain_in
+	// - rain_cm, rain_in
 	// - temp_f and temp_c
 	// - rel_humidity
 	// - dew_point_f, dew_point_c
@@ -84,7 +84,6 @@ func enrichVevor7in1(rm paho.PublishReceived) map[string]any {
 		retv["f_heat_index_c"] = heatIdxC.Unwrap()
 	}
 
-	retv["f_rain_mm"] = msg.RainMm
 	retv["f_rain_cm"] = msg.RainMm / 10.0
 	retv["f_rain_in"] = msg.RainMm / 25.4
 
