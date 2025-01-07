@@ -46,7 +46,7 @@ func enrichVevor7in1(rm paho.PublishReceived) map[string]any {
 	// - wind_speed_mph, wind_speed_kmh, wind_speed_kt
 	// - wind_gust_mph, wind_gust_kmh, wind_gust_kt
 	// - wind_bearing (alias of wind_dir_deg)
-	// - recommended_max_indoor_humidity_f, recommended_max_indoor_humidity_c
+	// - recommended_max_indoor_humidity
 	// - wet_bulb_f, wet_bulb_c
 	// - heat_index_f, heat_index_c
 	// - wind_chill_f, wind_chill_c
@@ -64,8 +64,7 @@ func enrichVevor7in1(rm paho.PublishReceived) map[string]any {
 	retv["f_rel_humidity"] = msg.Humidity
 	retv["f_dew_point_f"] = libwx.DewPointF(libwx.TempC(msg.TempC).F(), libwx.RelHumidity(msg.Humidity)).Unwrap()
 	retv["f_dew_point_c"] = libwx.DewPointC(libwx.TempC(msg.TempC), libwx.RelHumidity(msg.Humidity)).Unwrap()
-	retv["f_recommended_max_indoor_humidity_f"] = libwx.IndoorHumidityRecommendationF(libwx.TempC(msg.TempC).F()).Unwrap()
-	retv["f_recommended_max_indoor_humidity_c"] = libwx.IndoorHumidityRecommendationC(libwx.TempC(msg.TempC)).Unwrap()
+	retv["f_recommended_max_indoor_humidity"] = libwx.IndoorHumidityRecommendationF(libwx.TempC(msg.TempC).F()).Unwrap()
 
 	wetBulbTempF, wetBulbTempFErr := libwx.WetBulbF(libwx.TempC(msg.TempC).F(), libwx.RelHumidity(msg.Humidity))
 	wetBulbTempC, wetBulbTempCErr := libwx.WetBulbC(libwx.TempC(msg.TempC), libwx.RelHumidity(msg.Humidity))

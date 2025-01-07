@@ -39,7 +39,7 @@ func enrichAcurite6045M(rm paho.PublishReceived) map[string]any {
 	// - temp_f and temp_c
 	// - rel_humidity
 	// - dew_point_f, dew_point_c
-	// - recommended_max_indoor_humidity_f, recommended_max_indoor_humidity_c
+	// - recommended_max_indoor_humidity
 	// - wet_bulb_f, wet_bulb_c
 	// - heat_index_f, heat_index_c
 	// TODO(cdzombak): absolute humidity ( https://github.com/cdzombak/mqttwxenrich/issues/2 ; libwx https://github.com/cdzombak/libwx/issues/4 )
@@ -64,8 +64,7 @@ func enrichAcurite6045M(rm paho.PublishReceived) map[string]any {
 	retv["f_rel_humidity"] = msg.Humidity
 	retv["f_dew_point_f"] = libwx.DewPointF(libwx.TempF(msg.TempF), libwx.RelHumidity(msg.Humidity)).Unwrap()
 	retv["f_dew_point_c"] = libwx.DewPointC(libwx.TempF(msg.TempF).C(), libwx.RelHumidity(msg.Humidity)).Unwrap()
-	retv["f_recommended_max_indoor_humidity_f"] = libwx.IndoorHumidityRecommendationF(libwx.TempF(msg.TempF)).Unwrap()
-	retv["f_recommended_max_indoor_humidity_c"] = libwx.IndoorHumidityRecommendationC(libwx.TempF(msg.TempF).C()).Unwrap()
+	retv["f_recommended_max_indoor_humidity"] = libwx.IndoorHumidityRecommendationF(libwx.TempF(msg.TempF)).Unwrap()
 
 	wetBulbTempF, wetBulbTempFErr := libwx.WetBulbF(libwx.TempF(msg.TempF), libwx.RelHumidity(msg.Humidity))
 	wetBulbTempC, wetBulbTempCErr := libwx.WetBulbC(libwx.TempF(msg.TempF).C(), libwx.RelHumidity(msg.Humidity))
