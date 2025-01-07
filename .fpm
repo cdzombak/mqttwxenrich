@@ -1,0 +1,6 @@
+-s dir
+--name mqttwxenrich
+--description "Enrich MQTT messages from weather sensors with unit conversion and supplemental calculations"
+--url "https://github.com/cdzombak/mqwttwxenrich"
+--maintainer "Chris Dzombak <https://www.dzombak.com>"
+--license LGPL-3.0
