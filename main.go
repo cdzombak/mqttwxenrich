@@ -8,10 +8,13 @@ import (
 	"net/url"
 	"os"
 	"os/signal"
+	"strconv"
 	"strings"
 	"syscall"
+	"time"
 
 	ec "github.com/cdzombak/exitcode_go"
+	"github.com/cdzombak/heartbeat"
 	"github.com/eclipse/paho.golang/autopaho"
 	"github.com/eclipse/paho.golang/paho"
 )
@@ -22,23 +25,40 @@ const (
 	EnvVarMqttPass     = "MQTT_PASS"
 	EnvVarMqttTopic    = "MQTT_TOPIC"
 	EnvVarMqttClientID = "MQTT_CLIENT_ID"
+	HealthPort         = "HEALTH_PORT"
+	HealthyInterval    = "HEALTHY_INTERVAL"
 )
 
 type Config struct {
-	MqttServer   *url.URL
-	MqttUser     string
-	MqttPass     string
-	MqttTopic    string
-	DestTopic    string
-	MqttClientID string
+	MqttServer      *url.URL
+	MqttUser        string
+	MqttPass        string
+	MqttTopic       string
+	DestTopic       string
+	MqttClientID    string
+	HealthPort      int
+	HealthyInterval time.Duration
 }
 
 func Main(cfg *Config) error {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
-	// TODO(cdzombak): heartbeat
-	//                 https://github.com/cdzombak/mqttwxenrich/issues/3
+	var (
+		hb  heartbeat.Heartbeat
+		err error
+	)
+	if cfg.HealthPort > 0 {
+		hb, err = heartbeat.NewHeartbeat(&heartbeat.Config{
+			HeartbeatInterval: 2 * cfg.HealthyInterval,
+			LivenessThreshold: cfg.HealthyInterval,
+			Port:              cfg.HealthPort,
+		})
+		if err != nil {
+			log.Fatalf("failed to start heartbeat: %s", err)
+		}
+		hb.Start()
+	}
 
 	receivedMessages := make(chan paho.PublishReceived)
 
@@ -90,7 +110,7 @@ func Main(cfg *Config) error {
 			case <-ctx.Done():
 				return
 			case rm := <-receivedMessages:
-				go handleMessage(ctx, c, cfg, rm)
+				go handleMessage(ctx, c, cfg, hb, rm)
 			}
 		}
 	}(ctx)
@@ -113,7 +133,11 @@ func main() {
 		fmt.Sprintf("MQTT topic on which to listen. Defaults to env var %s. Required. Output is written to <this topic>/enrichment.", EnvVarMqttTopic))
 	mqttClientID := flag.String("mqtt-client-id", os.Getenv(EnvVarMqttClientID),
 		fmt.Sprintf("MQTT client ID. Defaults to env var %s. If not specified, a random client ID including the hostname and program name is generated.", EnvVarMqttClientID))
+	healthPortStr := flag.String("health-port", os.Getenv(HealthPort),
+		fmt.Sprintf("Port on which to serve healthcheck endpoint. Defaults to env var %s. If not specified, no health endpoint is served.", HealthPort))
 	printVersion := flag.Bool("version", false, "Print version and exit.")
+	healthyIntervalStr := flag.String("healthy-interval", os.Getenv(HealthyInterval),
+		fmt.Sprintf("Interval at which messages must be received from MQTT and enriched to be considered healthy (in seconds). Defaults to env var %s, or 300s (5 minutes) if unset.", HealthyInterval))
 	flag.Parse()
 
 	if *printVersion {
@@ -161,6 +185,31 @@ func main() {
 		MqttPass:     *mqttPass,
 		MqttTopic:    *mqttTopic,
 		DestTopic:    fmt.Sprintf("%s/enrichment", *mqttTopic),
+	}
+
+	if *healthPortStr != "" {
+		cfg.HealthPort, err = strconv.Atoi(*healthPortStr)
+		if err != nil {
+			_, _ = fmt.Fprintf(os.Stderr, "Failed to parse health port '%s': %s\n", *healthPortStr, err)
+			os.Exit(ec.InvalidArgument)
+		}
+		if cfg.HealthPort < 1 || cfg.HealthPort > 65535 {
+			_, _ = fmt.Fprintf(os.Stderr, "Invalid health port '%s'.\n", *healthPortStr)
+			os.Exit(ec.InvalidArgument)
+		}
+	}
+
+	if *healthyIntervalStr == "" {
+		cfg.HealthyInterval = 300 * time.Second
+	} else {
+		hi, err := strconv.Atoi(*healthyIntervalStr)
+		if err != nil {
+			_, _ = fmt.Fprintf(os.Stderr, "Failed to parse healthy interval '%s': %s\n", *healthyIntervalStr, err)
+		}
+		if hi < 1 {
+			_, _ = fmt.Fprintf(os.Stderr, "Invalid healthy interval '%s'.\n", *healthyIntervalStr)
+		}
+		cfg.HealthyInterval = time.Duration(hi) * time.Second
 	}
 
 	if cfg.MqttClientID == "" {

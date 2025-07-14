@@ -11,6 +11,7 @@ require (
 )
 
 require (
+	github.com/cdzombak/heartbeat v1.1.1 // indirect
 	github.com/gorilla/websocket v1.5.3 // indirect
 	golang.org/x/net v0.42.0 // indirect
 )

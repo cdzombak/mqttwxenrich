@@ -14,6 +14,10 @@ ARG BIN_NAME
 ARG BIN_VERSION
 COPY --from=builder /src/${BIN_NAME}/out/${BIN_NAME} /usr/bin/${BIN_NAME}
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+ENV HEALTH_PORT=8888
+RUN apk --no-cache add curl
+HEALTHCHECK --interval=10s --timeout=2s --start-period=10s --retries=5 \
+  CMD curl -fsS --max-time 2 http://localhost:8888/
 ENTRYPOINT ["/usr/bin/mqttwxenrich"]
 
 LABEL license="LGPL3"

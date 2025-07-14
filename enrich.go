@@ -4,7 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"log"
+	"time"
 
+	"github.com/cdzombak/heartbeat"
 	"github.com/eclipse/paho.golang/autopaho"
 	"github.com/eclipse/paho.golang/paho"
 )
@@ -18,6 +20,7 @@ func handleMessage(
 	ctx context.Context,
 	mqtt *autopaho.ConnectionManager,
 	cfg *Config,
+	hb heartbeat.Heartbeat,
 	msg paho.PublishReceived,
 ) {
 	jsonMap := make(map[string]any)
@@ -67,5 +70,10 @@ func handleMessage(
 		})
 	if err != nil {
 		log.Printf("failed to publish enrichment message: %s", err)
+		return
+	}
+
+	if hb != nil {
+		hb.Alive(time.Now())
 	}
 }
