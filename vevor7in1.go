@@ -50,7 +50,7 @@ func enrichVevor7in1(rm paho.PublishReceived) map[string]any {
 	// - wet_bulb_f, wet_bulb_c
 	// - heat_index_f, heat_index_c
 	// - wind_chill_f, wind_chill_c
-	// TODO(cdzombak): absolute humidity ( https://github.com/cdzombak/mqttwxenrich/issues/2 ; libwx https://github.com/cdzombak/libwx/issues/4 )
+	// - abs_humidity
 	// schema to match https://github.com/cdzombak/openweather-influxdb-connector/blob/294c9b7c201fe303c70eb450d767e695b0f9b037/main.go#L187-L221 .
 	// fields named with f_ prefix for easy compatibility with https://github.com/cdzombak/mqtt2influxdb ;
 	// tags named with t_ prefix
@@ -62,6 +62,7 @@ func enrichVevor7in1(rm paho.PublishReceived) map[string]any {
 	retv["f_temp_f"] = libwx.TempC(msg.TempC).F().Unwrap()
 	retv["f_temp_c"] = msg.TempC
 	retv["f_rel_humidity"] = msg.Humidity
+	retv["f_abs_humidity"] = libwx.AbsHumidityFromRelC(libwx.TempC(msg.TempC), libwx.RelHumidity(msg.Humidity)).Unwrap()
 	retv["f_dew_point_f"] = libwx.DewPointF(libwx.TempC(msg.TempC).F(), libwx.RelHumidity(msg.Humidity)).Unwrap()
 	retv["f_dew_point_c"] = libwx.DewPointC(libwx.TempC(msg.TempC), libwx.RelHumidity(msg.Humidity)).Unwrap()
 	retv["f_recommended_max_indoor_humidity"] = libwx.IndoorHumidityRecommendationF(libwx.TempC(msg.TempC).F()).Unwrap()
