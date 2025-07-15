@@ -1,0 +1,136 @@
+# Home Assistant MQTT Weather Station Configuration
+# Example configuration for mqttwxenrich MQTT output
+# 
+# This file contains example configurations for integrating weather station data
+# enriched by mqttwxenrich into Home Assistant via MQTT.
+#
+# Prerequisites:
+# 1. Configure mqttwxenrich with your MQTT broker details
+# 2. Set the input topic (e.g., home/weather/garden-wxsta) - output will be home/weather/garden-wxsta/enrichment
+# 3. Add this configuration to your Home Assistant configuration.yaml
+#
+# Replace "home/weather/garden-wxsta/enrichment" with your actual output topic
+
+mqtt:
+  sensor:
+    # Vevor 7-in-1 Weather Station Sensors
+    - name: "Temperature"
+      unique_id: "garden_outdoor_temp_f"
+      state_topic: "home/weather/garden-wxsta/enrichment"
+      value_template: "{{ value_json.f_temp_f }}"
+      unit_of_measurement: "°F"
+      device_class: "temperature"
+      state_class: "measurement"
+      device:
+        identifiers: ["garden_wx_station"]
+        name: "Garden Weather Station"
+        model: "7-in-1"
+        manufacturer: "Vevor"
+
+    - name: "Humidity"
+      unique_id: "garden_outdoor_humidity"
+      state_topic: "home/weather/garden-wxsta/enrichment"
+      value_template: "{{ value_json.f_rel_humidity }}"
+      unit_of_measurement: "%"
+      device_class: "humidity"
+      state_class: "measurement"
+      device:
+        identifiers: ["garden_wx_station"]
+
+    - name: "Absolute Humidity"
+      unique_id: "garden_absolute_humidity"
+      state_topic: "home/weather/garden-wxsta/enrichment"
+      value_template: "{{ value_json.f_abs_humidity }}"
+      unit_of_measurement: "g/m³"
+      state_class: "measurement"
+      device:
+        identifiers: ["garden_wx_station"]
+
+    - name: "Recommended Max Indoor Humidity"
+      unique_id: "garden_max_indoor_humidity"
+      state_topic: "home/weather/garden-wxsta/enrichment"
+      value_template: "{{ value_json.f_recommended_max_indoor_humidity }}"
+      unit_of_measurement: "%"
+      device_class: "humidity"
+      state_class: "measurement"
+      device:
+        identifiers: ["garden_wx_station"]
+
+    - name: "Dew Point"
+      unique_id: "garden_dew_point_f"
+      state_topic: "home/weather/garden-wxsta/enrichment"
+      value_template: "{{ value_json.f_dew_point_f }}"
+      unit_of_measurement: "°F"
+      device_class: "temperature"
+      state_class: "measurement"
+      device:
+        identifiers: ["garden_wx_station"]
+
+    - name: "Wet Bulb Temperature"
+      unique_id: "garden_wet_bulb_f"
+      state_topic: "home/weather/garden-wxsta/enrichment"
+      value_template: "{{ value_json.f_wet_bulb_f }}"
+      unit_of_measurement: "°F"
+      device_class: "temperature"
+      state_class: "measurement"
+      device:
+        identifiers: ["garden_wx_station"]
+
+    - name: "Heat Index"
+      unique_id: "garden_heat_index_f"
+      state_topic: "home/weather/garden-wxsta/enrichment"
+      value_template: "{{ value_json.f_heat_index_f }}"
+      unit_of_measurement: "°F"
+      device_class: "temperature"
+      state_class: "measurement"
+      device:
+        identifiers: ["garden_wx_station"]
+
+    - name: "Wind Chill"
+      unique_id: "garden_wind_chill_f"
+      state_topic: "home/weather/garden-wxsta/enrichment"
+      value_template: "{{ value_json.f_wind_chill_f }}"
+      unit_of_measurement: "°F"
+      device_class: "temperature"
+      state_class: "measurement"
+      device:
+        identifiers: ["garden_wx_station"]
+
+    - name: "Wind Direction"
+      unique_id: "garden_wind_bearing"
+      state_topic: "home/weather/garden-wxsta/enrichment"
+      value_template: "{{ value_json.f_wind_bearing }}"
+      unit_of_measurement: "°"
+      state_class: "measurement"
+      device:
+        identifiers: ["garden_wx_station"]
+
+    - name: "Wind Speed"
+      unique_id: "garden_wind_speed_mph"
+      state_topic: "home/weather/garden-wxsta/enrichment"
+      value_template: "{{ value_json.f_wind_speed_mph }}"
+      unit_of_measurement: "mph"
+      device_class: "wind_speed"
+      state_class: "measurement"
+      device:
+        identifiers: ["garden_wx_station"]
+
+    - name: "Wind Gust"
+      unique_id: "garden_wind_gust_mph"
+      state_topic: "home/weather/garden-wxsta/enrichment"
+      value_template: "{{ value_json.f_wind_gust_mph }}"
+      unit_of_measurement: "mph"
+      device_class: "wind_speed"
+      state_class: "measurement"
+      device:
+        identifiers: ["garden_wx_station"]
+
+    - name: "Rain"
+      unique_id: "garden_rain_in"
+      state_topic: "home/weather/garden-wxsta/enrichment"
+      value_template: "{{ value_json.f_rain_in }}"
+      unit_of_measurement: "in"
+      device_class: "precipitation"
+      state_class: "total_increasing"
+      device:
+        identifiers: ["garden_wx_station"]

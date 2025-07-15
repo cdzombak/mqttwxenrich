@@ -1,0 +1,98 @@
+# Home Assistant MQTT Weather Station Configuration
+# Example configuration for mqttwxenrich MQTT output
+#
+# This file contains example configurations for integrating weather station data
+# enriched by mqttwxenrich into Home Assistant via MQTT.
+#
+# Prerequisites:
+# 1. Configure mqttwxenrich with your MQTT broker details
+# 2. Set the input topic (e.g., home/weather/shed-acurite) - output will be home/weather/shed-acurite/enrichment
+# 3. Add this configuration to your Home Assistant configuration.yaml
+#
+# Replace "home/weather/shed-acurite/enrichment" with your actual output topic
+
+mqtt:
+  sensor:
+    # Acurite 6045M Temperature/Humidity/Lightning Sensor
+    - name: "Temperature"
+      unique_id: "shed_wx_temp_f"
+      state_topic: "home/weather/shed-acurite/enrichment"
+      value_template: "{{ value_json.f_temp_f }}"
+      unit_of_measurement: "°F"
+      device_class: "temperature"
+      state_class: "measurement"
+      device:
+        identifiers: ["shed_weather_sensor"]
+        name: "Shed Weather Sensor"
+        model: "6045M"
+        manufacturer: "Acurite"
+
+    - name: "Humidity"
+      unique_id: "shed_wx_humidity"
+      state_topic: "home/weather/shed-acurite/enrichment"
+      value_template: "{{ value_json.f_rel_humidity }}"
+      unit_of_measurement: "%"
+      device_class: "humidity"
+      state_class: "measurement"
+      device:
+        identifiers: ["shed_weather_sensor"]
+
+    - name: "Absolute Humidity"
+      unique_id: "shed_wx_absolute_humidity"
+      state_topic: "home/weather/shed-acurite/enrichment"
+      value_template: "{{ value_json.f_abs_humidity }}"
+      unit_of_measurement: "g/m³"
+      state_class: "measurement"
+      device:
+        identifiers: ["shed_weather_sensor"]
+
+    - name: "Recommended Max Indoor Humidity"
+      unique_id: "shed_wx_max_indoor_humidity"
+      state_topic: "home/weather/shed-acurite/enrichment"
+      value_template: "{{ value_json.f_recommended_max_indoor_humidity }}"
+      unit_of_measurement: "%"
+      device_class: "humidity"
+      state_class: "measurement"
+      device:
+        identifiers: ["shed_weather_sensor"]
+
+    - name: "Dew Point"
+      unique_id: "shed_wx_dew_point_f"
+      state_topic: "home/weather/shed-acurite/enrichment"
+      value_template: "{{ value_json.f_dew_point_f }}"
+      unit_of_measurement: "°F"
+      device_class: "temperature"
+      state_class: "measurement"
+      device:
+        identifiers: ["shed_weather_sensor"]
+
+    - name: "Wet Bulb Temperature"
+      unique_id: "shed_wx_wet_bulb_f"
+      state_topic: "home/weather/shed-acurite/enrichment"
+      value_template: "{{ value_json.f_wet_bulb_f }}"
+      unit_of_measurement: "°F"
+      device_class: "temperature"
+      state_class: "measurement"
+      device:
+        identifiers: ["shed_weather_sensor"]
+
+    - name: "Heat Index"
+      unique_id: "shed_wx_heat_index_f"
+      state_topic: "home/weather/shed-acurite/enrichment"
+      value_template: "{{ value_json.f_heat_index_f }}"
+      unit_of_measurement: "°F"
+      device_class: "temperature"
+      state_class: "measurement"
+      device:
+        identifiers: ["shed_weather_sensor"]
+
+    - name: "Lightning Storm Distance"
+      unique_id: "shed_wx_storm_distance_mi"
+      state_topic: "home/weather/shed-acurite/enrichment"
+      value_template: "{{ value_json.f_storm_distance_mi if value_json.f_storm_distance_mi is defined else '' }}"
+      unit_of_measurement: "mi"
+      state_class: "measurement"
+      icon: "mdi:weather-lightning"
+      availability_template: "{{ 'online' if value_json.f_storm_distance_mi is defined else 'offline' }}"
+      device:
+        identifiers: ["shed_weather_sensor"]
