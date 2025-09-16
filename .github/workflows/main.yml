@@ -305,7 +305,7 @@ jobs:
 
   homebrew:
     name: Update Homebrew Tap
-    needs: [meta, binaries]
+    needs: [meta, binaries, release]
     if: needs.meta.outputs.is_release == 'true'
     runs-on: ubuntu-latest
     steps:
