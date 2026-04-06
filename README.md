@@ -79,8 +79,8 @@ All arguments can also be specified via the corresponding environment variable.
 |---|---|---|---|---|
 | `-mqtt-server` | `MQTT_SERVER` | MQTT broker URL. The `mqtt://` scheme prefix is added automatically if not present. | **Yes** | -- |
 | `-mqtt-topic` | `MQTT_TOPIC` | MQTT topic to subscribe to. Enriched output is written to `<this topic>/enrichment`. | **Yes** | -- |
-| `-mqtt-user` | `MQTT_USER` | MQTT username for authentication. Required iff `-mqtt-pass` is specified. | No | -- |
-| `-mqtt-pass` | `MQTT_PASS` | MQTT password for authentication. | No | -- |
+| `-mqtt-user` | `MQTT_USER` | MQTT username for authentication. Required if `-mqtt-pass` is specified. | No | -- |
+| `-mqtt-pass` | `MQTT_PASS` | MQTT password for authentication. Required if `-mqtt-user` is specified. | No | -- |
 | `-mqtt-client-id` | `MQTT_CLIENT_ID` | MQTT client ID. If not specified, a random ID including the hostname and program name is generated. | No | Auto-generated |
 | `-health-port` | `HEALTH_PORT` | Port on which to serve a health check HTTP endpoint. If not specified, no health endpoint is served. | No | -- |
 | `-healthy-interval` | `HEALTHY_INTERVAL` | Interval (in seconds) at which messages must be received and enriched to be considered healthy. | No | `300` (5 minutes) |
