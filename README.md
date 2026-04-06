@@ -26,8 +26,8 @@ Temperature, humidity, and lightning sensor. Enrichment output includes:
 | `f_wet_bulb_c` | Wet bulb temperature in Celsius (when calculable) |
 | `f_heat_index_f` | Heat index in Fahrenheit (when calculable) |
 | `f_heat_index_c` | Heat index in Celsius (when calculable) |
-| `f_storm_distance_mi` | Lightning storm distance in miles (when storm detected, 0-30 range) |
-| `f_storm_distance_km` | Lightning storm distance in kilometers (when storm detected, 0-30 range) |
+| `f_storm_distance_mi` | Lightning storm distance in miles (when storm detected) |
+| `f_storm_distance_km` | Lightning storm distance in kilometers (when storm detected) |
 
 ### Vevor 7-in-1
 
