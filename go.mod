@@ -1,8 +1,6 @@
 module mqttwxenrich
 
-go 1.24.0
-
-toolchain go1.24.4
+go 1.25.0
 
 require (
 	github.com/cdzombak/exitcode_go v0.0.2
@@ -13,5 +11,5 @@ require (
 
 require (
 	github.com/gorilla/websocket v1.5.3 // indirect
-	golang.org/x/net v0.43.0 // indirect
+	golang.org/x/net v0.55.0 // indirect
 )
