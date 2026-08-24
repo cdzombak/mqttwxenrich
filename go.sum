@@ -1,5 +1,5 @@
-github.com/cdzombak/exitcode_go v0.0.2 h1:+q0tClqg3vEQuFgEpNgQHmVUZX2BXyXitIq1Q00jK78=
-github.com/cdzombak/exitcode_go v0.0.2/go.mod h1:VvYt055HSseEAPgdTHVevUdR1xoBp1tWvIAflepES+U=
+github.com/cdzombak/exitcode_go v1.0.0 h1:0ij5g18nTVXcH0BNcxfUDZe7Zu7COYXCn/HF9mcdv7M=
+github.com/cdzombak/exitcode_go v1.0.0/go.mod h1:QA/4W7udTJO3abha2yx89to0XsUYSHLyDfTKE/gZp0w=
 github.com/cdzombak/heartbeat v1.1.2 h1:JPVO7h7m+UzxOZS173ygXouM+jcjIXJxGRvTKbn1QOg=
 github.com/cdzombak/heartbeat v1.1.2/go.mod h1:pK5GKvyesTKeHFpI4PeJSElTO0m0TqjG/r9PG81yyGA=
 github.com/cdzombak/libwx v1.4.0 h1:ROWviMTQ3q/Gew/GEDPOZt5283rHYYRMh0Lu/uEnQAs=

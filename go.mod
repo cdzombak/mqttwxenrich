@@ -5,7 +5,7 @@ go 1.24.0
 toolchain go1.24.4
 
 require (
-	github.com/cdzombak/exitcode_go v0.0.2
+	github.com/cdzombak/exitcode_go v1.0.0
 	github.com/cdzombak/heartbeat v1.1.2
 	github.com/cdzombak/libwx v1.4.0
 	github.com/eclipse/paho.golang v0.23.0
